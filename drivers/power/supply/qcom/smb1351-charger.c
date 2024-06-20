@@ -494,7 +494,7 @@ struct smb1351_charger {
 	struct dentry		*debug_root;
 	u32			peek_poke_address;
 
-#ifdef CONFIG_MACH_XIAOMI_OXYGEN
+#if defined(CONFIG_MACH_XIAOMI_OXYGEN) || (CONFIG_MACH_XIAOMI_MARKW)
 	unsigned int		chg_en_gpio;
 #endif
 
@@ -1314,7 +1314,7 @@ static int smb1351_set_usb_chg_current(struct smb1351_charger *chip,
 	} else if (current_ma == USB3_MIN_CURRENT_MA) {
 		/* USB 3.0 - 150mA */
 		reg = CMD_USB_3_MODE | CMD_USB_100_MODE;
-#ifndef CONFIG_MACH_XIAOMI_OXYGEN
+#if !(defined(CONFIG_MACH_XIAOMI_OXYGEN) || (CONFIG_MACH_XIAOMI_MARKW))
 	} else if (current_ma == USB2_MAX_CURRENT_MA) {
 		/* USB 2.0 - 500mA */
 		reg = CMD_USB_2_MODE | CMD_USB_500_MODE;
@@ -2663,7 +2663,7 @@ static int smb1351_parse_dt(struct smb1351_charger *chip)
 	chip->pinctrl_state_name = of_get_property(node, "pinctrl-names", NULL);
 	chip->otg_enable = of_property_read_bool(node, "qcom,otg-enable");
 
-#ifdef CONFIG_MACH_XIAOMI_OXYGEN
+#if defined(CONFIG_MACH_XIAOMI_OXYGEN) || (CONFIG_MACH_XIAOMI_MARKW)
 	chip->chg_en_gpio = of_get_named_gpio(node, "qcom,parallel-chg-en", 0);
 	if (gpio_is_valid(chip->chg_en_gpio)) {
 		rc = gpio_request(chip->chg_en_gpio, "parallel_en_gpio");
