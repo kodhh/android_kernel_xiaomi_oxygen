@@ -36,7 +36,6 @@
 #include <linux/of_gpio.h>
 #include <linux/platform_device.h>
 #include <linux/regulator/consumer.h>
-#include <linux/hwinfo.h>
 #include <linux/notifier.h>
 #include <linux/fb.h>
 #include <linux/mdss_io_util.h>
@@ -387,11 +386,9 @@ static ssize_t device_prepare_set(struct device *dev,
 
 	if (!strncmp(buf, "enable", strlen("enable"))) {
 		rc = device_prepare(fpc1020, true);
-		update_hardware_info(TYPE_FP, 1);
 
 	} else if (!strncmp(buf, "disable", strlen("disable"))) {
 		rc = device_prepare(fpc1020, false);
-		update_hardware_info(TYPE_FP, 0);
 	} else {
 		return -EINVAL;
 	}

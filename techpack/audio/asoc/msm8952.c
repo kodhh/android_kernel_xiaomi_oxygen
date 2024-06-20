@@ -24,7 +24,6 @@
 #include <asoc/msm-cdc-pinctrl.h>
 #include "msm8952.h"
 #include "msm-pcm-voice-v2.h"
-#include <asm/bootinfo.h>
 
 #define DRV_NAME "msm8952-asoc-wcd"
 
@@ -1636,7 +1635,6 @@ static void *def_msm8952_wcd_mbhc_cal(void)
 	void *msm8952_wcd_cal;
 	struct wcd_mbhc_btn_detect_cfg *btn_cfg;
 	u16 *btn_low, *btn_high;
-	u32 hw_version;
 
 	msm8952_wcd_cal = kzalloc(WCD_MBHC_CAL_SIZE(WCD_MBHC_DEF_BUTTONS,
 				WCD_MBHC_DEF_RLOADS), GFP_KERNEL);
@@ -1694,15 +1692,6 @@ static void *def_msm8952_wcd_mbhc_cal(void)
 	btn_low[4] = 500;
 	btn_high[4] = 750;
 #endif
-
-	/* A 200ohm resistor is connected on headset mic pin on D4 P3,
-	   for fixing the noise issue introduced by NFC P2. So need
-	   re-calculate the button threshold */
-	hw_version = get_hw_version();
-	if (hw_version >= 0x160 && hw_version <= 0x180) {
-		btn_high[0] = 200;
-		btn_high[1] = 380;
-	}
 
 	return msm8952_wcd_cal;
 }
